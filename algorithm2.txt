@@ -1,0 +1,22 @@
+main loop
+
+while 1:
+	if there are no candidates for expansion:
+		return failure
+
+	choose a leaf node from open_nodes for expansion by sorting all open_nodes with an evaluation function
+
+	if chosen leaf node contains goal state:
+		add leaf node to closed_nodes
+		add leaf nodes path cost to closed_nodes_path_cost
+		return closed_nodes as solution
+	else:
+		expand the node
+		add the resulting nodes to the search tree	
+		add leaf nodes path cost to closed_nodes_path_cost
+		add leaf node to closed_nodes
+
+evaluation function
+
+node_total_path_cost + distance between start node and goal node
+
