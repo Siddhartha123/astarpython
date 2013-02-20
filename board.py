@@ -28,17 +28,10 @@ class board(object):
 
 	def __str__(self):
 		toreturn = ''
-		for x in range(self.length):
-			for y in range(self.height):
-				 #toreturn += str(self.nodes[x][y].x)+','+str(self.nodes[x][y].y)+' '
+		for y in range(self.height):
+			for x in range(self.length):
 				 toreturn += str(self.nodes[x][y])
 			toreturn += "\n"
 		return toreturn
 
-#b = board()
-#print(b)
-#print(b.start.distance_to(b.goal))
-#print(b.goal.distance_to(b.start))
-#print(b.nodes[5][5].distance_to(b.start))
-#print(b.start.distance_to(b.nodes[5][5]))
 

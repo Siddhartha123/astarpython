@@ -2,7 +2,7 @@ import math
 
 class node(object):
 
-	path_cost = 0
+	path_cost = 1
 	x = 0
 	y = 0		
 	state = '?'
@@ -15,7 +15,7 @@ class node(object):
 		return str(self.state)
 
 	def __eq__(self,other):
-		if other.x == self.x and other.y == self.y:
+		if other.x == self.x and other.y == self.y and other.path_cost == self.path_cost:
 			return True
 		else:
 			return False
@@ -29,11 +29,10 @@ class node(object):
 		x = self.x - other_node.x
 		y = self.y - other_node.y
 
-		return math.ceil(math.sqrt((x**2) + (y**2)))
+		return math.floor(math.sqrt((x**2) + (y**2)))
 
 	def evaluation_function(node,goal):
-		print("Evaluating ",node.x,node.y,node.path_cost,goal.x,goal.y)
-		return node.path_cost + node.distance_to(goal)
+		return (node.distance_to(goal) + node.path_cost)
 
 	def info(self):
 		return str(self.x+self.y)
