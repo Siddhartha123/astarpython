@@ -1,0 +1,43 @@
+Informal - Generalized Search Algorithm
+
+while 1:
+	if there are no candidates for expansion:
+		return failure
+
+	choose a leaf node from tree for expansion according to strategy
+
+	if chosen leaf node contains goal state:
+		return the solution
+	else:
+		expand the node
+		add the resulting nodes to the search tree	
+
+Formal - Generalized Search Algorithm
+
+def general_search(problem, queuing_function):
+
+	nodes = make_queue(make_node(initial_state[problem]))
+
+	while 1:
+		if len(nodes) < 1:
+			return "Failure"
+
+		node = nodes.pop()
+
+		if goal_test(problem, state(node)):
+			return node
+		nodes = queuing_function(nodes,node_expand(node))
+
+Formal - Best First Search
+
+def best_first_search(problem, evaluation_function):
+	
+	return general_search(problem, queueing_function)
+
+Formal - Best First Search Queuing Function
+
+def queueing_fuction(nodes):
+
+	nodes.sort()	
+	
+def cmp_to_key(	

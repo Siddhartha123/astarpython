@@ -1,37 +1,60 @@
-from node import node
+from square import square
 
 class board(object):
 
 	start = 0
 	goal = 0
-	length = 50
-	height = 50
-	nodes = []
+	length = 10
+	height = 10
+	squares = []
 
-	def __init__(self):
-		self.nodes = [[node(x,y) for x in range(self.length)] for y in range(self.height)] 
+	def __init__(self,path):
+		self.squares = [[square(x,y) for x in range(self.length)] for y in range(self.height)] 
 		for x in range(self.length):
 			for y in range(self.height):
-				self.nodes[x][y] = node(x,y)
+				self.squares[x][y] = square(x,y)
 
-		with open('board50obs.txt') as input_data:
+		with open(path) as input_data:
 			x = 0
 			y = 0
 			for y in range(self.height):
 				line = input_data.readline().strip()
 				for x in range(self.length):
-					self.nodes[x][y].set_state(line[x])
+					self.squares[x][y].state = line[x]
+					self.link(self.squares[x][y])
+					print "north of x,y = " + str(self.squares[x][y].north)
 				y = y + 1
 
-			self.start = self.nodes[0][0]
-			self.goal = self.nodes[self.length-1][self.height-1]
+			self.start = self.squares[0][0]
+			self.goal = self.squares[self.length-1][self.height-1]
 
 	def __str__(self):
 		toreturn = ''
 		for y in range(self.height):
 			for x in range(self.length):
-				 toreturn += str(self.nodes[x][y])
+				 toreturn += str(self.squares[x][y])
 			toreturn += "\n"
 		return toreturn
 
+	def lookup(self,x,y):
+		try:
+			if self.squares[x][y].state == '7':
+				return 0
+			else:
+				return self.squares[x][y]
+		except:
+			return 0	
 
+	def link(self,square):
+		x = square.x
+		y = square.y
+
+		square.north = self.lookup(x,y-1)
+		square.northwest = self.lookup(x-1,y-1)
+		square.west = self.lookup(x-1,y)
+		square.southwest = self.lookup(x-1,y+1)
+		square.south = self.lookup(x,y+1)
+		square.southeast = self.lookup(x+1,y+1)
+		square.east = self.lookup(x+1,y)
+		square.northeast = self.lookup(x+1,y-1)
+		
