@@ -25,7 +25,9 @@ Running
 =======
 
     python search.py <board txt path> <board width> <board height>
+
 ie:
+
     python search.py boards/board50obs.txt 50 50
 
 Pseudocode
