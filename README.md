@@ -35,7 +35,7 @@ Pseudocode
 
 This was taken from http://en.wikipedia.org/wiki/A*_search_algorithm:
 
-<pre>
+`
 function A*(start,goal)
     closedset := the empty set    // The set of nodes already evaluated.
     openset := {start}    // The set of tentative nodes to be evaluated, initially containing the start node
@@ -72,6 +72,6 @@ function reconstruct_path(came_from, current_node)
         return (p + current_node)
     else
         return current_node
-</pre>
+`
 
 
