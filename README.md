@@ -24,10 +24,9 @@ You will need a board to find a path across. Some sample boards are in /boards. 
 Running
 =======
 
- python search.py <board txt path> <board width> <board height>
-
+    python search.py <board txt path> <board width> <board height>
 ie:
- python search.py boards/board50obs.txt 50 50
+    python search.py boards/board50obs.txt 50 50
 
 Pseudocode
 ==========
