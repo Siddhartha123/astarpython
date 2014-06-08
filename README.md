@@ -64,8 +64,9 @@ This was taken from http://en.wikipedia.org/wiki/A*_search_algorithm:
                 if neighbor not in openset
                     add neighbor to openset
  
-    return failure
+    return failure</pre>
 
+<pre>
 function reconstruct_path(came_from, current_node)
     if current_node in came_from
         p := reconstruct_path(came_from, came_from[current_node])
