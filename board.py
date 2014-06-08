@@ -8,7 +8,10 @@ class board(object):
 	height = 20
 	squares = []
 
-	def __init__(self,path):
+	def __init__(self,path,length,height):
+		self.length = int(length)
+		self.height = int(height)
+
 		self.squares = [[square(x,y) for x in range(self.length)] for y in range(self.height)] 
 		for x in range(self.length):
 			for y in range(self.height):

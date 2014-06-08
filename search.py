@@ -1,6 +1,7 @@
 from square import square
 from board import board
 import math
+import sys
 
 class search(object):
 
@@ -11,10 +12,10 @@ class search(object):
 	f_score = {}
 	theboard = ""
 
-	def __init__(self,path):
+	def __init__(self):
 
 		i = 0
-		for sq in self.run(path):
+		for sq in self.run():
 			print "i = " + str(i)
 			print str(sq)
 			self.theboard.squares[sq.x][sq.y].state = '*'
@@ -22,9 +23,9 @@ class search(object):
 		print self.theboard
 	
 
-	def run(self,path):
+	def run(self):
 	
-		self.theboard = board(path)
+		self.theboard = board(sys.argv[1],sys.argv[2],sys.argv[3])
 		print self.theboard
 		start = self.theboard.start
 		goal = self.theboard.goal
@@ -35,16 +36,13 @@ class search(object):
 
 		while self.count(self.openset) > 0:
 			f_score_sorted = sorted(self.f_score, key=lambda square: self.g_score[square] + self.heuristic_cost_estimate(square,goal))
-			#print "f_score_sorted = " + str(f_score_sorted)
 			i = 0
 			for f_score_sq in f_score_sorted:
-				#print "i = " + str(i)
-				#print "square = " + str(f_score_sq)
 				i = i + 1
 
 
 			i = 0
-			# pick the best square that hasn't been evaluated
+			# pick the best square that hasn't already been evaluated
 			for i in range(len(f_score_sorted)-1):
 				if(f_score_sorted[i] in self.openset):
 					break
@@ -52,8 +50,6 @@ class search(object):
 			current = f_score_sorted[i]
 			if current == goal:
 				return self.reconstruct_path(goal)
-
-			#print "current is " + str(current)
 
 			self.openset.remove(current)
 			self.closedset.add(current)
@@ -110,7 +106,6 @@ class search(object):
 		return self.distance_to(start_node,end_node)			
 
 	def reconstruct_path(self, current_node):
-		#print " asked to reconstruct from " + str(current_node)
 
 		try: 
 			self.came_from[current_node]
@@ -129,4 +124,4 @@ class search(object):
 		return total_count
 		
 
-search('boards/board20obs.txt')
+search()
