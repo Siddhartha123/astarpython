@@ -3,6 +3,7 @@ astarpython
 
 My implementation of the A* pathfinding algorithm, with text visulisations of the pathfinding in plain ASCII.
 
+<pre>
  *000000000
  0**0000000
  777*777070
@@ -13,6 +14,7 @@ My implementation of the A* pathfinding algorithm, with text visulisations of th
  00000000*0
  00000000*0
  000000000*
+</pre>
 
 Setup
 =======
