@@ -1,179 +1,132 @@
+from square import square
 from board import board
-from collections import defaultdict
-import sys
+import math
 
-class a_star_search(object):
+class search(object):
 
-	board = 0
-	open_list = []
-	closed_list = []
-	solution_path = []
+	closedset = set()
+	openset = set()
+	came_from = {}
+	g_score = {}
+	f_score = {}
+	theboard = ""
 
-	def __init__(self):
-		self.board = board()
-		self.board.start.set_state('S')
-		self.board.goal.set_state('G')
+	def __init__(self,path):
 
-		# initial start node
-		self.open_list.append(self.board.start)
-		self.expand_node(self.board.start)
-		self.closed_list.append(self.board.start)
-		
-
-		# expansion loop for normal nodes
-		while 1:
-			leaf_node = self.choose_node_for_expansion()
-			print "len after expand ",len(self.open_list)
-			leaf_node.set_state('.')
-			
-			if leaf_node.x == self.board.goal.x and leaf_node.y == self.board.goal.y:
-				self.open_list.append(leaf_node)
-				self.closed_list.append(leaf_node)
-				self.solution_append(leaf_node)
-				print "Finished!"
-				print "Took ",len(self.solution_path), "steps"
-				#for n in self.solution_path:
-				#	print n.x,n.y,n.path_cost
-				break
-
-			else:
-				self.close_all_other_open_nodes()
-				self.open_list.append(leaf_node)
-				self.expand_node(leaf_node)
-				self.solution_append(leaf_node)
-				self.open_list.remove(leaf_node)
-				self.closed_list.append(leaf_node)
-		
-			print(self.board)
-
-	def solution_append(self,node):
-		for dupe_node in self.solution_path: 
-			if dupe_node.x == node.x and dupe_node.y == node.y:
-				if node.evaluation_function(self.board.goal) < dupe_node.evaluation_function(self.board.goal):
-					print "updating solution"
-					self.solution_path.remove(dupe_node)
-					self.solution_path.add(node)
-					return
-		self.solution_path.append(node)
-			
-
-	def choose_node_for_expansion(self):
-
-		self.open_list = sorted(self.open_list, key=lambda node: node.evaluation_function(self.board.goal))
-		print "len before pop ",len(self.open_list)
-		node_to_expand = self.open_list.pop(0)	
-		print "len after pop ",len(self.open_list)
-		#print "open list - "
-		#for i in self.open_list:
-		#	print i.x,i.y,i.path_cost
-		print node_to_expand
-		print("We are choosing node ",node_to_expand.x,node_to_expand.y, " with a pathcost of ",node_to_expand.path_cost)
-		self.print_num_equals_open()
-		print "Length of open list = " , len(self.open_list)
-		return node_to_expand
-
-	def close_all_other_open_nodes(self):
-		pass
-
-	def expand_node(self,node):
-		print("Expanding node ", node.x,node.y)
-
-		if len([closed_node for closed_node in self.closed_list if closed_node == node]) != 0:
-			print "Item is already in closed list!"
-			return
-
-		if node.x < board.length-1: # expand right
-			new_node = self.board.nodes[node.x+1][node.y]
-			if len([open_node for open_node in self.open_list if open_node == new_node]) == 0:
-				if(str(new_node) != '7'): # isn't an obstacle
-					new_node.path_cost = new_node.path_cost + node.path_cost
-					self.open_list.append(new_node)
-					print "appending node ",new_node.x,new_node.y
-				else:
-					print "Ran into obstacle"
+		i = 0
+		for sq in self.run(path):
+			print "i = " + str(i)
+			print str(sq)
+			self.theboard.squares[sq.x][sq.y].state = '*'
+			i = i + 1
+		print self.theboard
 	
-		if node.x > 0: # expand left
-			new_node = self.board.nodes[node.x-1][node.y]
-			if len([open_node for open_node in self.open_list if open_node == new_node]) == 0:
-				if(str(new_node) != '7'): # isn't an obstacle
-					new_node.path_cost = new_node.path_cost + node.path_cost
-					self.open_list.append(new_node)
-					print "appending node ",new_node.x,new_node.y
-				else:
-					print "Ran into obstacle"
-		
-		if node.y < board.height-1: # expand down
-			new_node = self.board.nodes[node.x][node.y+1]
-			if len([open_node for open_node in self.open_list if open_node == new_node]) == 0:
-				if(str(new_node) != '7'): # isn't an obstacle
-					new_node.path_cost = new_node.path_cost + node.path_cost
-					self.open_list.append(new_node)
-					print "appending node ",new_node.x,new_node.y
-				else:
-					print "Ran into obstacle"
+
+	def run(self,path):
 	
-		if node.y > 0: # expand up
-			new_node = self.board.nodes[node.x][node.y-1]
-			if len([open_node for open_node in self.open_list if open_node == new_node]) == 0:
-				if(str(new_node) != '7'): # isn't an obstacle
-					new_node.path_cost = new_node.path_cost + node.path_cost
-					self.open_list.append(new_node)
-					print "appending node ",new_node.x,new_node.y
-				else:
-					print "Ran into obstacle"
+		self.theboard = board(path)
+		print self.theboard
+		start = self.theboard.start
+		goal = self.theboard.goal
 
-		if node.y > 0 and node.x > 0: # expand diagonal up left
-			new_node = self.board.nodes[node.x-1][node.y-1]
-			if len([open_node for open_node in self.open_list if open_node == new_node]) == 0:
-				if(str(new_node) != '7'): # isn't an obstacle
-					new_node.path_cost = new_node.path_cost + node.path_cost
-					self.open_list.append(new_node)
-					print "appending node ",new_node.x,new_node.y
-				else:
-					print "Ran into obstacle"
+		self.g_score[start] = 0
+		self.f_score[start] = self.g_score[start] + self.heuristic_cost_estimate(start,goal)
+		self.openset.add(start)
 
-		if node.y > 0 and node.x < board.length-1: # expand diagonal up right
-			new_node = self.board.nodes[node.x+1][node.y-1]
-			if len([open_node for open_node in self.open_list if open_node == new_node]) == 0:
-				if(str(new_node) != '7'): # isn't an obstacle
-					new_node.path_cost = new_node.path_cost + node.path_cost
-					print "appending node up right ",new_node.x,new_node.y
-					self.open_list.append(new_node)
-				else:
-					print "Ran into obstacle on diagonal up right"
-
-		if node.y < board.height-1 and node.x > 0: # expand diagonal down left
-			new_node = self.board.nodes[node.x-1][node.y+1]
-			if len([open_node for open_node in self.open_list if open_node == new_node]) == 0:
-				if(str(new_node) != '7'): # isn't an obstacle
-					new_node.path_cost = new_node.path_cost + node.path_cost
-					self.open_list.append(new_node)
-					print "appending node ",new_node.x,new_node.y
-				else:
-					print "Ran into obstacle"
+		while self.count(self.openset) > 0:
+			f_score_sorted = sorted(self.f_score, key=lambda square: self.g_score[square] + self.heuristic_cost_estimate(square,goal))
+			#print "f_score_sorted = " + str(f_score_sorted)
+			i = 0
+			for f_score_sq in f_score_sorted:
+				#print "i = " + str(i)
+				#print "square = " + str(f_score_sq)
+				i = i + 1
 
 
-		if node.y < board.height-1 and node.x < board.length-1: # expand diagonal down right
-			new_node = self.board.nodes[node.x+1][node.y+1]
-			if len([open_node for open_node in self.open_list if open_node == new_node]) == 0:
-				if(str(new_node) != '7'): # isn't an obstacle
-					new_node.path_cost = new_node.path_cost + node.path_cost
-					self.open_list.append(new_node)
-					print "appending node ",new_node.x,new_node.y
-				else:
-					print "Ran into obstacle"
+			i = 0
+			# pick the best square that hasn't been evaluated
+			for i in range(len(f_score_sorted)-1):
+				if(f_score_sorted[i] in self.openset):
+					break
 
+			current = f_score_sorted[i]
+			if current == goal:
+				return self.reconstruct_path(goal)
 
-	def print_num_equals_open(self):
+			#print "current is " + str(current)
 
-		appearances = defaultdict(int)
-		for curr in self.open_list:
-			appearances[curr] += 1
-		print("Number of dupes = ",len(self.open_list) - len(appearances))
-
-a = a_star_search()
-
-
-
-				
+			self.openset.remove(current)
+			self.closedset.add(current)
+			for neighbour in self.neighbour_nodes(current):
+				if neighbour not in self.closedset:
 					
+					temp_g_score = self.g_score[current] + self.distance_to(current,neighbour)
+					if (neighbour not in self.openset) or (temp_g_score < self.g_score[neighbour]):
+						# pick this path..
+						self.came_from[neighbour] = current
+						self.g_score[neighbour] = temp_g_score
+						self.f_score[neighbour] = self.g_score[neighbour] + self.heuristic_cost_estimate(neighbour,goal)
+						
+						if neighbour not in self.openset:
+							self.openset.add(neighbour)
+				
+			
+		print "Reached the end of nodes to expand, failure"				
+
+
+	def neighbour_nodes(self,node):
+		neighbours = set()
+
+		if node.northwest != 0:
+			neighbours.add(node.northwest)
+		if node.north != 0:
+			neighbours.add(node.north)
+		if node.northeast != 0:
+			neighbours.add(node.northeast)
+		if node.east != 0:
+			neighbours.add(node.east)
+		if node.west != 0:
+			neighbours.add(node.west)
+		if node.southwest != 0:
+			neighbours.add(node.southwest)
+		if node.southeast != 0:
+			neighbours.add(node.southeast)
+		if node.south != 0:
+			neighbours.add(node.south)
+
+		return neighbours
+
+
+	def distance_to(self,start_node,end_node):
+		x = start_node.x - end_node.x
+		y = start_node.y - end_node.y
+
+		return math.floor(math.sqrt((x**2) + (y**2)))
+
+	def evaluation_function(self,node,goal):
+		return (node.self.distance_to(goal) + node.path_cost)
+
+	def heuristic_cost_estimate(self,start_node,end_node):
+		return self.distance_to(start_node,end_node)			
+
+	def reconstruct_path(self, current_node):
+		#print " asked to reconstruct from " + str(current_node)
+
+		try: 
+			self.came_from[current_node]
+			p = self.reconstruct_path(self.came_from[current_node])
+			return_path = []
+			return_path.extend(p)
+			return_path.append(current_node)
+			return return_path
+		except KeyError,e:
+			return [current_node]
+
+	def count(self,set_to_count):
+		total_count = 0
+		for i in set_to_count:
+			total_count = total_count + 1
+		return total_count
+		
+
+search('boards/board20obs.txt')

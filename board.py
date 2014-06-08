@@ -4,8 +4,8 @@ class board(object):
 
 	start = 0
 	goal = 0
-	length = 10
-	height = 10
+	length = 20
+	height = 20
 	squares = []
 
 	def __init__(self,path):
@@ -22,7 +22,6 @@ class board(object):
 				for x in range(self.length):
 					self.squares[x][y].state = line[x]
 					self.link(self.squares[x][y])
-					print "north of x,y = " + str(self.squares[x][y].north)
 				y = y + 1
 
 			self.start = self.squares[0][0]
@@ -37,17 +36,17 @@ class board(object):
 		return toreturn
 
 	def lookup(self,x,y):
-		try:
-			if self.squares[x][y].state == '7':
-				return 0
-			else:
-				return self.squares[x][y]
-		except:
-			return 0	
+		if (x < 0) or (y < 0) or (x > (self.length - 1)) or (y > (self.height - 1)) or self.squares[x][y].state == '7':
+			return 0
+		else:
+			return self.squares[x][y]
 
 	def link(self,square):
 		x = square.x
 		y = square.y
+
+		if self.squares[x][y].state == '7':
+			return
 
 		square.north = self.lookup(x,y-1)
 		square.northwest = self.lookup(x-1,y-1)
