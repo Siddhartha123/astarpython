@@ -66,7 +66,8 @@ function A*(start,goal)
                     add neighbor to openset
  
     return failure
-
+</pre>
+<pre>
 function reconstruct_path(came_from, current_node)
     if current_node in came_from
         p := reconstruct_path(came_from, came_from[current_node])
