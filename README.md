@@ -36,7 +36,7 @@ Pseudocode
 This was taken from http://en.wikipedia.org/wiki/A*_search_algorithm:
 
 
-`function A*(start,goal)
+<pre>function A*(start,goal)
     closedset := the empty set    // The set of nodes already evaluated.
     openset := {start}    // The set of tentative nodes to be evaluated, initially containing the start node
     came_from := the empty map    // The map of navigated nodes.
@@ -64,9 +64,8 @@ This was taken from http://en.wikipedia.org/wiki/A*_search_algorithm:
                 if neighbor not in openset
                     add neighbor to openset
  
-    return failure`
-    
-<pre>
+    return failure
+
 function reconstruct_path(came_from, current_node)
     if current_node in came_from
         p := reconstruct_path(came_from, came_from[current_node])
