@@ -33,7 +33,7 @@ ie:
 Pseudocode
 ==========
 
-This was taken from http://en.wikipedia.org/wiki/A*_search_algorithm:
+This was taken from [http://en.wikipedia.org/wiki/A*_search_algorithm]:
 
 
 `
