@@ -24,6 +24,7 @@ class search(object):
 	
 
 	def run(self):
+		""" See /docs/pseudocode.txt for full algorithm pseudocode """
 	
 		self.theboard = board(sys.argv[1],sys.argv[2],sys.argv[3])
 		print self.theboard
@@ -31,7 +32,7 @@ class search(object):
 		goal = self.theboard.goal
 
 		self.g_score[start] = 0
-		self.f_score[start] = self.g_score[start] + self.heuristic_cost_estimate(start,goal)
+		self.f_score[start] = self.g_score[start]+ self.heuristic_cost_estimate(start,goal)
 		self.openset.add(start)
 
 		while self.count(self.openset) > 0:
@@ -44,7 +45,7 @@ class search(object):
 			i = 0
 			# pick the best square that hasn't already been evaluated
 			for i in range(len(f_score_sorted)-1):
-				if(f_score_sorted[i] in self.openset):
+				if(f_score_sorted[i] not in self.closedset):
 					break
 
 			current = f_score_sorted[i]
@@ -56,7 +57,7 @@ class search(object):
 			for neighbour in self.neighbour_nodes(current):
 				if neighbour not in self.closedset:
 					
-					temp_g_score = self.g_score[current] + self.distance_to(current,neighbour)
+					temp_g_score = self.g_score[current] + 1 #self.distance_to(current,neighbour)
 					if (neighbour not in self.openset) or (temp_g_score < self.g_score[neighbour]):
 						# pick this path..
 						self.came_from[neighbour] = current
@@ -73,20 +74,12 @@ class search(object):
 	def neighbour_nodes(self,node):
 		neighbours = set()
 
-		if node.northwest != 0:
-			neighbours.add(node.northwest)
 		if node.north != 0:
 			neighbours.add(node.north)
-		if node.northeast != 0:
-			neighbours.add(node.northeast)
 		if node.east != 0:
 			neighbours.add(node.east)
 		if node.west != 0:
 			neighbours.add(node.west)
-		if node.southwest != 0:
-			neighbours.add(node.southwest)
-		if node.southeast != 0:
-			neighbours.add(node.southeast)
 		if node.south != 0:
 			neighbours.add(node.south)
 
@@ -97,13 +90,14 @@ class search(object):
 		x = start_node.x - end_node.x
 		y = start_node.y - end_node.y
 
-		return math.floor(math.sqrt((x**2) + (y**2)))
+		return 1 * max(abs(x),abs(y))
 
 	def evaluation_function(self,node,goal):
 		return (node.self.distance_to(goal) + node.path_cost)
 
 	def heuristic_cost_estimate(self,start_node,end_node):
-		return self.distance_to(start_node,end_node)			
+		heuristic = self.distance_to(start_node,end_node)
+		return heuristic 
 
 	def reconstruct_path(self, current_node):
 
