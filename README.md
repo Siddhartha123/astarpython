@@ -1,7 +1,7 @@
 astarpython
 ===========
 
-My implementation of the A* pathfinding algorithm, with text visulisations of the pathfinding in plain ASCII.
+My implementation of the A* pathfinding algorithm, with 'Roguelike' text visulisations of the pathfinding in plain ASCII.
 
 Passable squares are denoted by a '0' character, and impassable squares by a '7'. For the sake of simplicity, currently the start square is always the top left square (0,0) and the goal square is always the bottom right square.
 
