@@ -49,7 +49,11 @@ class search(object):
             if current == goal:
                 return self.reconstruct_path(goal)
 
-            self.openset.remove(current)
+            try:
+                self.openset.remove(current)
+            except KeyError,e:
+                pass
+
             self.closedset.add(current)
             for neighbour in self.neighbour_nodes(current):
                 if neighbour not in self.closedset:
