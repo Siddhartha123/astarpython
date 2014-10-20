@@ -21,6 +21,7 @@ class search(object):
         print self.theboard
 
     def run(self):
+        """ Run the search """
 
         # setup board
         self.theboard = board(sys.argv[1],sys.argv[2],sys.argv[3])
